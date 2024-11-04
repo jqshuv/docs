@@ -7,12 +7,12 @@
   },
   "favicon": "/favicon.svg",
   "colors": {
-    "primary": "#0D9373",
-    "light": "#07C983",
-    "dark": "#0D9373",
+    "primary": "#f9f9f9",
+    "light": "#ffffff",
+    "dark": "#f9f9f9",
     "anchors": {
-      "from": "#0D9373",
-      "to": "#07C983"
+      "from": "#595959",
+      "to": "#c4c4c4"
     }
   },
   "topbarLinks": [
@@ -29,6 +29,15 @@
     {
       "name": "API Reference",
       "url": "api-reference"
+    },
+    {
+      "name": "Short",
+      "url": "short",
+      "openapi": "/short/openapi.json"
+    },
+    {
+      "name": "Blog",
+      "url": "https://your-website.com/blog"
     }
   ],
   "anchors": [
@@ -39,8 +48,8 @@
     },
     {
       "name": "Community",
-      "icon": "slack",
-      "url": "https://mintlify.com/community"
+      "icon": "discord",
+      "url": "https://dsc.gg/qrd"
     },
     {
       "name": "Blog",
@@ -81,11 +90,16 @@
         "api-reference/endpoint/create",
         "api-reference/endpoint/delete"
       ]
+    },
+    {
+      "group": "Test",
+      "pages": [
+        "short/introduction"
+      ]
     }
   ],
   "footerSocials": {
-    "x": "https://x.com/mintlify",
-    "github": "https://github.com/mintlify",
-    "linkedin": "https://linkedin.com/company/mintlify"
+    "github": "https://github.com/jqshuv",
+    "discord": "https://dsc.gg/qrd"
   }
 }

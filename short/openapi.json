@@ -1,0 +1,359 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "short",
+    "version": "1.2.1",
+    "description": "Short simple url shortener."
+  },
+  "servers": [
+    {
+      "url": "https://s.jqshuv.com",
+      "description": "Production server (Secured with API Key)"
+    },
+    {
+      "url": "http://localhost:8787",
+      "description": "Local development server by wrangler"
+    }
+  ],
+  "paths": {
+    "/{shortcode}": {
+      "get": {
+        "operationId": "redirectsToTheTargetUrl",
+        "tags": [
+          "short"
+        ],
+        "summary": "Redirects to the target url",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/shortcode"
+          }
+        ],
+        "responses": {
+          "302": {
+            "description": "The requested resource resides temporarily at a different URI, as indicated by the Location header in the response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "location": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "message",
+                    "location"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api": {
+      "post": {
+        "operationId": "createANewRedirect",
+        "tags": [
+          "short"
+        ],
+        "summary": "Create a new redirect",
+        "responses": {
+          "201": {
+            "description": "Created - Resource successfully created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "shortcode": {
+                      "type": "string"
+                    },
+                    "redirect": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "shortcode",
+                    "redirect"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "description": "",
+                      "enum": [
+                        "shortcode_too_long",
+                        "invalid_expire_time"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "status"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "description": "",
+                      "default": "unauthorized",
+                      "enum": [
+                        "unauthorized"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "status"
+                  ]
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Shortcode already exists",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "description": "",
+                      "default": "shortcode_already_exists",
+                      "enum": [
+                        "shortcode_already_exists"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "status"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "redirect": {
+                    "type": "string"
+                  },
+                  "shortcode": {
+                    "type": "string"
+                  },
+                  "expire": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 525600,
+                    "description": "The number of minutes before the shortcode expires. Default is 0, which means never expires."
+                  }
+                },
+                "required": [
+                  "redirect"
+                ]
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "authheader": []
+          },
+          {
+            "authquery": []
+          }
+        ],
+        "parameters": []
+      },
+      "put": {
+        "operationId": "updatesAShortcode",
+        "tags": [
+          "short"
+        ],
+        "summary": "Updates a shortcode",
+        "responses": {
+          "200": {
+            "description": "OK - Resource successfully updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "shortcode": {
+                      "type": "string"
+                    },
+                    "redirect": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "data",
+                    "shortcode",
+                    "redirect"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "description": "Updates a redirect url.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "shortcode": {
+                    "type": "string"
+                  },
+                  "redirect": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "shortcode",
+                  "redirect"
+                ]
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "authheader": []
+          },
+          {
+            "authquery": []
+          }
+        ],
+        "parameters": []
+      },
+      "delete": {
+        "operationId": "deletesAShortcode",
+        "tags": [
+          "short"
+        ],
+        "summary": "Deletes a shortcode",
+        "responses": {
+          "204": {
+            "$ref": "#/components/responses/NoContent"
+          }
+        },
+        "security": [
+          {
+            "authheader": []
+          },
+          {
+            "authquery": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "parameters": {
+      "shortcode": {
+        "name": "shortcode",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      }
+    },
+    "securitySchemes": {
+      "authheader": {
+        "type": "apiKey",
+        "name": "Authorization with Header",
+        "in": "header"
+      },
+      "authquery": {
+        "type": "apiKey",
+        "name": "Authorization with Query",
+        "in": "query"
+      }
+    },
+    "responses": {
+      "NotFound": {
+        "description": "The server cannot find the requested resource. The endpoint may be invalid or the resource may no longer exist.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "message"
+              ]
+            }
+          }
+        }
+      },
+      "NoContent": {
+        "description": "The request was successful, but there is no content to return in the response.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "short"
+    }
+  ]
+}
